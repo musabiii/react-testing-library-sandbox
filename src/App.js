@@ -1,5 +1,7 @@
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const getUser = () => Promise.resolve({id:1,name:"Musa"})
 
 const Search = ({ value, onChange, children }) => (
   <div>
@@ -10,6 +12,15 @@ const Search = ({ value, onChange, children }) => (
 
 function App() {
   const [search, setSearch] = useState("");
+  const [user, setUser] = useState("");
+
+  useEffect(()=>{
+    const loadUser = async () => {
+      const user = await getUser();
+      setUser(user);
+    };
+    loadUser()
+  },[])
 
   const handleChange = (e) => {
     setSearch(e.target.value);
@@ -17,6 +28,7 @@ function App() {
 
   return (
     <div className="App">
+      {user && <h2> Logged in as {user.name}</h2>}
       <img alt="search image"/>
       <Search value={search} onChange={handleChange}>
         Search:
